@@ -7,6 +7,8 @@ public class Interceptor : MonoBehaviour
     static public Vector2 velocity;
     static public float mass;
 
+    public float launchOffset;
+
     private SceneController controller;
     private LineRenderer lineRenderer;
 
@@ -23,14 +25,9 @@ public class Interceptor : MonoBehaviour
 
     void Update()
     {
-        if (!controller.isShowingSimulation) return;
         lineRenderer.SetPosition(lineRenderer.positionCount++, transform.position);
-    }
-
-    void FixedUpdate()
-    {
-        if (!controller.isShowingSimulation) return;
-        velocity.y -= SceneController.gravityAcceleration * Time.deltaTime;
-        transform.position += (Vector3)velocity * Time.deltaTime; // using deltaTime, not fixedDeltaTime, so that code can be moved
+        Vector2 acceleration = new Vector2(0, -SceneController.gravityAcceleration);
+        transform.position = velocity * (controller.simulationTime - launchOffset) +
+            acceleration * Mathf.Pow(controller.simulationTime - launchOffset, 2) / 2;
     }
 }

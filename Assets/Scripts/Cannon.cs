@@ -39,8 +39,7 @@ public class Cannon : MonoBehaviour
     public float minStep;
 
     private SceneController controller;
-    private InterceptionResult calculationResult; 
-    private float rotationProgress = 0f;
+    private InterceptionResult calculationResult;
     
     void Start()
     {
@@ -103,14 +102,12 @@ public class Cannon : MonoBehaviour
         return new InterceptionResult(delta);
     }
 
-    IEnumerator launchInterceptor()
+    public void launchInterceptor()
     {
-        yield return new WaitForSeconds(calculationResult.rotationTime);
-        Interceptor interceptor = Instantiate(interceptorPrefab, transform.position, Quaternion.identity);
         Interceptor.velocity = calculationResult.velocity;
         Interceptor.mass = projectileMass;
-        yield return new WaitForSeconds(calculationResult.time - calculationResult.rotationTime);
-        controller.isShowingSimulation = false;
+        Interceptor interceptor = Instantiate(interceptorPrefab, transform.position, Quaternion.identity);
+        interceptor.launchOffset = calculationResult.rotationTime;
     }
 
     void handleCalculations()
@@ -118,21 +115,20 @@ public class Cannon : MonoBehaviour
         if (calculationResult.isInercepted) return;
         if (calculationResult.delta <= minStep) return; 
         calculationResult = findInterceptionPoint(calculationResult.delta * stepFactor);
-        controller.isShowingSimulation = calculationResult.isInercepted;
-        if (controller.isShowingSimulation) StartCoroutine(launchInterceptor());
+        if (calculationResult.isInercepted)
+            controller.startSimulation(calculationResult.rotationTime, calculationResult.time);
     }
 
     void Update()
     {
         handleCalculations();
-        if (controller.isShowingSimulation && rotationProgress < calculationResult.rotationTime) {
-            rotationProgress += Time.deltaTime;
+        if (controller.isShowingSimulation && controller.simulationTime < calculationResult.rotationTime) {
             transform.rotation = Quaternion.Lerp(
                 Quaternion.Euler(0, 0, initialAngle),
                 Quaternion.Euler(0, 0, calculationResult.rotation),
-                rotationProgress / calculationResult.rotationTime
+                controller.simulationTime / calculationResult.rotationTime
             );
-            if (rotationProgress >= calculationResult.rotationTime)
+            if (controller.simulationTime >= calculationResult.rotationTime)
                 transform.rotation = Quaternion.Euler(0, 0, calculationResult.rotation);
         }
     }

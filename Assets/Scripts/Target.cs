@@ -12,7 +12,6 @@ public class Target : MonoBehaviour
 
     private SceneController controller;
     private LineRenderer lineRenderer;
-    private Vector2 velocity;
 
     static public bool isInsideTheTarget(Vector2 point, Vector2 targetPosition)
     {
@@ -33,21 +32,13 @@ public class Target : MonoBehaviour
         lineRenderer.startColor = color;
         lineRenderer.endColor = color;
         lineRenderer.positionCount = 0;
-
-        velocity = initialVelocity;
     }
 
     void Update()
     {
-        if (!controller.isShowingSimulation) return;
         lineRenderer.SetPosition(lineRenderer.positionCount++, transform.position);
-    }
-
-    void FixedUpdate()
-    {
-        if (!controller.isShowingSimulation) return;
-        velocity += initialVelocity.normalized * acceleration * Time.deltaTime;
-        velocity.y -= SceneController.gravityAcceleration * Time.deltaTime;
-        transform.position += (Vector3)velocity * Time.deltaTime; // using deltaTime, not fixedDeltaTime, so that code can be moved
+        Vector2 finalAcceleration = acceleration * initialVelocity.normalized - new Vector2(0, SceneController.gravityAcceleration);
+        transform.position = startPosition + initialVelocity * controller.simulationTime +
+            finalAcceleration * Mathf.Pow(controller.simulationTime, 2) / 2;
     }
 }
