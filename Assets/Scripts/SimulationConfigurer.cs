@@ -8,7 +8,7 @@ public class SimulationConfigurer : MonoBehaviour
 {
     public void onClick()
     {   
-        if (transform.name == "Panel1") {
+        if (transform.name == "Panel2D") {
             Target.startPosition.x = float.Parse(transform.Find("Target.startPosition.x").GetComponent<TMP_InputField>().text);
             Target.startPosition.y = float.Parse(transform.Find("Target.startPosition.y").GetComponent<TMP_InputField>().text);
             Target.initialVelocity.x = float.Parse(transform.Find("Target.initialVelocity.x").GetComponent<TMP_InputField>().text);
@@ -21,7 +21,7 @@ public class SimulationConfigurer : MonoBehaviour
             Target.acceleration = float.Parse(transform.Find("Target.acceleration").GetComponent<TMP_InputField>().text);
             SceneController.gravityAcceleration = float.Parse(transform.Find("SceneController.gravityAcceleration").GetComponent<TMP_InputField>().text);       
             SceneManager.LoadScene("Scenes/InSimulation");
-        } else if (transform.name == "Panel4") {
+        } else if (transform.name == "Panel3D") {
             Target3D.startPosition.x = float.Parse(transform.Find("Target.startPosition.x").GetComponent<TMP_InputField>().text);
             Target3D.startPosition.y = float.Parse(transform.Find("Target.startPosition.y").GetComponent<TMP_InputField>().text);
             Target3D.startPosition.z = float.Parse(transform.Find("Target.startPosition.z").GetComponent<TMP_InputField>().text);
