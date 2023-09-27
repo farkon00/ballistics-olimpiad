@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interceptorPrefab: {fileID: 5626340528704952556, guid: 1bd931eed1e055326835d21c64d6beb8, type: 3}
+  particlePrefab: {fileID: 3080869120964941613, guid: 2dc73c40d5652215ca253bdfff902c3d, type: 3}
   stepFactor: 0.5
   iterationsPerFrame: 4000
 --- !u!23 &94912360

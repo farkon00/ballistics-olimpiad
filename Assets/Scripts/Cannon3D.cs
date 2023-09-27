@@ -36,6 +36,7 @@ public class Cannon3D : MonoBehaviour
     static public Vector2 rotationSpeed;
 
     public Interceptor3D interceptorPrefab;
+    public GameObject particlePrefab;
     public float stepFactor;
     public int iterationsPerFrame;
 
@@ -105,21 +106,16 @@ public class Cannon3D : MonoBehaviour
                 delta *= stepFactor;
             }
             while (angleY <= 180f && iterations++ < iterationsPerFrame) {
-                Debug.Log(new Vector2(angleX, angleY));
                 float rotationTime = Mathf.Max(angleX / 360f / rotationSpeed.x, angleY / 360f / rotationSpeed.y);
                 Vector3 velocity = getCannonDirection(angleX, angleY) * projectileSpeed;
                 float? time = getTimeToCollideOnX(velocity, rotationTime);
                 if (time == null) continue;
-                Debug.Log(rotationTime);
-                Debug.Log(velocity);
-                Debug.Log(time);
                 float gravitationalDelta = SceneController3D.gravityAcceleration * Mathf.Pow((float)time - rotationTime, 2) / 2;
                 Vector3 interceptorPosition = new Vector3(
                     transform.position.x + velocity.x * ((float)time - rotationTime),
                     transform.position.y + velocity.y * ((float)time - rotationTime) - gravitationalDelta,
                     transform.position.z + velocity.z * ((float)time - rotationTime)
                 );
-                Debug.Log(interceptorPosition);
                 if (isInterceptingAt(interceptorPosition, (float)time))
                     return new InterceptionResult3D(delta, angleX, angleY, rotationTime, velocity, (float)time);
                 angleY += delta;
@@ -136,6 +132,9 @@ public class Cannon3D : MonoBehaviour
         Interceptor3D.mass = projectileMass;
         Interceptor3D interceptor = Instantiate(interceptorPrefab, transform.position, Quaternion.identity);
         interceptor.launchOffset = calculationResult.rotationTime;
+        GameObject particles = Instantiate(particlePrefab, transform.position + transform.up * -transform.localScale.y / 2, Quaternion.identity);
+        particles.transform.SetParent(gameObject.transform);
+        particles.transform.localRotation = Quaternion.Euler(90, -90, 0);
     }
 
     void handleCalculations()

@@ -361,6 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interceptorPrefab: {fileID: 2232325800805993097, guid: 398f5c0601ce3a8eca3a7d8997ef59d3, type: 3}
+  particlePrefab: {fileID: 3080869120964941613, guid: 2dc73c40d5652215ca253bdfff902c3d, type: 3}
   stepFactor: 0.5
   minStep: 0.016
 --- !u!120 &502411496
@@ -573,7 +574,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   leftBottomCorner: {x: -1, y: -2}
-  isShowingSimulation: 0
 --- !u!1 &525060251
 GameObject:
   m_ObjectHideFlags: 0

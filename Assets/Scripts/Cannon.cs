@@ -35,6 +35,7 @@ public class Cannon : MonoBehaviour
     static public float rotationSpeed;
 
     public Interceptor interceptorPrefab;
+    public GameObject particlePrefab;
     public float stepFactor;
     public float minStep;
 
@@ -108,6 +109,8 @@ public class Cannon : MonoBehaviour
         Interceptor.mass = projectileMass;
         Interceptor interceptor = Instantiate(interceptorPrefab, transform.position, Quaternion.identity);
         interceptor.launchOffset = calculationResult.rotationTime;
+        GameObject particles = Instantiate(particlePrefab, transform.position, Quaternion.identity);
+        particles.transform.rotation = Quaternion.Euler(-transform.eulerAngles.z, 90, 90);
     }
 
     void handleCalculations()
